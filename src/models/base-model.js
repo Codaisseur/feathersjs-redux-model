@@ -45,7 +45,7 @@ class BaseModel {
   }
 
   save(resource, properties) {
-    this.service.update(resource._id, Object.assign({}, resource, properties));
+    this.service.update(resource._id, properties);
   }
 
   getResource() {

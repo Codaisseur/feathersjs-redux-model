@@ -90,7 +90,7 @@ var BaseModel = function () {
   }, {
     key: 'save',
     value: function save(resource, properties) {
-      this.service.update(resource._id, (0, _simpleAssign2.default)({}, resource, properties));
+      this.service.update(resource._id, properties);
     }
   }, {
     key: 'getResource',
