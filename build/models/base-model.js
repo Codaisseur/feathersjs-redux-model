@@ -90,7 +90,20 @@ var BaseModel = function () {
   }, {
     key: 'save',
     value: function save(resource, properties) {
-      this.service.patch(resource._id, properties);
+      var reset = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+      if (reset) {
+        // Overwrite with the props
+        var _newProps = (0, _simpleAssign2.default)({}, resource, properties);
+        return this.service.update(resource._id, properties);
+      }
+
+      // Fetch the current version first, than assign the changes
+      var current = this.resources.find(function (r) {
+        return r._id === resource._id;
+      });
+      var newProps = (0, _simpleAssign2.default)({}, current, properties);
+      this.service.patch(resource._id, newProps);
     }
   }, {
     key: 'getResource',
@@ -108,6 +121,8 @@ var BaseModel = function () {
   }, {
     key: 'createResource',
     value: function createResource(resource) {
+      this.resources.push(resource);
+
       this.dispatch({
         type: this.resourceName.toUpperCase() + '_CREATED',
         payload: resource
@@ -116,6 +131,10 @@ var BaseModel = function () {
   }, {
     key: 'updateResource',
     value: function updateResource(resource) {
+      this.resources = this.resources.map(function (current) {
+        return current._id === resource._id ? resource : current;
+      });
+
       this.dispatch({
         type: this.resourceName.toUpperCase() + '_UPDATED',
         payload: resource
@@ -124,6 +143,10 @@ var BaseModel = function () {
   }, {
     key: 'removeResource',
     value: function removeResource(resource) {
+      this.resources = this.resources.filter(function (current) {
+        return current._id !== resource._id;
+      });
+
       this.dispatch({
         type: this.resourceName.toUpperCase() + '_REMOVED',
         payload: resource

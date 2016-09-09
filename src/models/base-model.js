@@ -8,13 +8,13 @@ class BaseModel {
   findParams() { return {}; }
 
   constructor(resourceName, dispatch, onError) {
-    this.app = api.app
-    this.resourceName = resourceName
+    this.app = api.app;
+    this.resourceName = resourceName;
     this.service = this.app.service(`${resourceName}s`);
     this.onChanges = [];
     this.resources = [];
 
-    this.dispatch = dispatch
+    this.dispatch = dispatch;
     this.service.on('created', this.createResource.bind(this));
     this.service.on('updated', this.updateResource.bind(this));
     this.service.on('removed', this.removeResource.bind(this));
@@ -28,11 +28,11 @@ class BaseModel {
         console.error(error);
       } else {
         this.resources = resources.data;
-        this.resourcesFetched()
+        this.resourcesFetched();
       }
     }).then((page) => {
-      self.resources = self.resources.concat(page.data)
-      self.resourcesFetched()
+      self.resources = self.resources.concat(page.data);
+      self.resourcesFetched();
     }).catch((error) => (console.log(error)));
   }
 
@@ -44,8 +44,17 @@ class BaseModel {
     this.service.remove(resource._id);
   }
 
-  save(resource, properties) {
-    this.service.patch(resource._id, properties);
+  save(resource, properties, reset = false) {
+    if (reset) {
+      // Overwrite with the props
+      const newProps = Object.assign({}, resource, properties)
+      return this.service.update(resource._id, properties);
+    }
+
+    // Fetch the current version first, than assign the changes
+    const current = this.resources.find((r) => (r._id === resource._id))
+    const newProps = Object.assign({}, current, properties)
+    this.service.patch(resource._id, newProps);
   }
 
   getResource() {
@@ -56,28 +65,37 @@ class BaseModel {
     this.dispatch({
       type: `${this.resourceName.toUpperCase()}S_FETCHED`,
       payload: this.resources
-    })
+    });
   }
 
   createResource(resource) {
+    this.resources.push(resource);
+
     this.dispatch({
       type: `${this.resourceName.toUpperCase()}_CREATED`,
       payload: resource
-    })
+    });
   }
 
   updateResource(resource) {
+    this.resources = this.resources.map((current) => {
+      return current._id === resource._id ? resource : current;
+    });
+
     this.dispatch({
       type: `${this.resourceName.toUpperCase()}_UPDATED`,
       payload: resource
-    })
+    });
   }
 
   removeResource(resource) {
+    this.resources = this.resources.filter(
+      (current) => (current._id !== resource._id));
+
     this.dispatch({
       type: `${this.resourceName.toUpperCase()}_REMOVED`,
       payload: resource
-    })
+    });
   }
 }
 
