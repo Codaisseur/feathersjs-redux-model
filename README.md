@@ -106,3 +106,32 @@ following pattern:
 In the example above we used the GameModel, so your events will look differently
 if you have another name for your model and service, e.g. `CARDS_FETCHED` for
 a `CardsModel` that hooks up to the `cards` service.
+
+### Example Reducer
+
+An example for a `games` reducer that acts on the default action types below:
+
+```js
+export default function updateGames(state = [], { type, payload }) {
+  switch (type) {
+    case 'GAMES_FETCHED' :
+      return payload
+
+    case 'GAME_CREATED' :
+      return state.concat([payload])
+
+    case 'GAME_UPDATED' :
+      const current = payload
+      return state.map((game) => {
+        return (game._id === current._id) ? current : game
+      })
+
+    case 'GAME_REMOVED' :
+      const removed = payload
+      return state.filter((game) => (game._id !== current._id))
+
+    default :
+      return state
+  }
+}
+```
