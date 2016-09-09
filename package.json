@@ -4,8 +4,10 @@
   "description": "FeathersJS client that hooks into your Redux store.",
   "main": "./src/index.js",
   "scripts": {
+    "prebuild": "npm run clean:build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=release babel ./src --out-dir ./build"
+    "build": "NODE_ENV=release babel ./src --out-dir ./build",
+    "clean:build": "rimraf build"
   },
   "repository": {
     "type": "git",
