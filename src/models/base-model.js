@@ -45,7 +45,7 @@ class BaseModel {
   }
 
   save(resource, properties) {
-    this.service.update(resource._id, properties);
+    this.service.patch(resource._id, properties);
   }
 
   getResource() {
