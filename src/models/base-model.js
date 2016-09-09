@@ -17,6 +17,7 @@ class BaseModel {
     this.dispatch = dispatch;
     this.service.on('created', this.createResource.bind(this));
     this.service.on('updated', this.updateResource.bind(this));
+    this.service.on('patched', this.updateResource.bind(this));
     this.service.on('removed', this.removeResource.bind(this));
   }
 
@@ -45,6 +46,8 @@ class BaseModel {
   }
 
   save(resource, properties, reset = false) {
+    console.log('Got props:', properties);
+
     if (reset) {
       // Overwrite with the props
       const newProps = Object.assign({}, resource, properties)
@@ -54,7 +57,7 @@ class BaseModel {
     // Fetch the current version first, than assign the changes
     const current = this.resources.find((r) => (r._id === resource._id))
     const newProps = Object.assign({}, current, properties)
-    this.service.patch(resource._id, newProps);
+    this.service.update(resource._id, newProps);
   }
 
   getResource() {

@@ -51,6 +51,7 @@ var BaseModel = function () {
     this.dispatch = dispatch;
     this.service.on('created', this.createResource.bind(this));
     this.service.on('updated', this.updateResource.bind(this));
+    this.service.on('patched', this.updateResource.bind(this));
     this.service.on('removed', this.removeResource.bind(this));
   }
 
@@ -92,6 +93,8 @@ var BaseModel = function () {
     value: function save(resource, properties) {
       var reset = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
+      console.log('Got props:', properties);
+
       if (reset) {
         // Overwrite with the props
         var _newProps = (0, _simpleAssign2.default)({}, resource, properties);
@@ -103,7 +106,7 @@ var BaseModel = function () {
         return r._id === resource._id;
       });
       var newProps = (0, _simpleAssign2.default)({}, current, properties);
-      this.service.patch(resource._id, newProps);
+      this.service.update(resource._id, newProps);
     }
   }, {
     key: 'getResource',
