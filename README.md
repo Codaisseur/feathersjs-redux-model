@@ -2,6 +2,8 @@
 
 FeathersJS client that hooks into your Redux store
 
+Check out the Example App: [A Multiplayer Memory Game](https://github.com/Codaisseur/feathers-memory-game).
+
 ## Install
 
 Install as an npm package directly from Github:
