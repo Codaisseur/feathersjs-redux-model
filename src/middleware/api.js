@@ -4,7 +4,7 @@ import feathers from 'feathers-client';
 class API {
   constructor() {
     // Establish a Socket.io connection
-    const socket = io();
+    const socket = io(process.env.FEATHERS_API_URL);
     // Initialize our Feathers client application through Socket.io
     // with hooks and authentication.
     this.app = feathers()
