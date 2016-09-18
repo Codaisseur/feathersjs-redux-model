@@ -27,7 +27,7 @@ var API = function () {
     _classCallCheck(this, API);
 
     // Establish a Socket.io connection
-    var socket = (0, _socket2.default)();
+    var socket = (0, _socket2.default)(process.env.FEATHERS_API_URL);
     // Initialize our Feathers client application through Socket.io
     // with hooks and authentication.
     this.app = (0, _feathersClient2.default)().configure(_feathersClient2.default.socketio(socket)).configure(_feathersClient2.default.hooks())
