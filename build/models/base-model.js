@@ -58,16 +58,13 @@ var BaseModel = function () {
   _createClass(BaseModel, [{
     key: 'find',
     value: function find() {
-      var _this = this;
-
       var self = this;
 
       this.service.find(this.findParams(), function (error, resources) {
         if (error) {
           console.error(error);
         } else {
-          _this.resources = resources.data;
-          _this.resourcesFetched();
+          self.resources = [];
         }
       }).then(function (page) {
         self.resources = self.resources.concat(page.data);
