@@ -28,8 +28,7 @@ class BaseModel {
       if (error) {
         console.error(error);
       } else {
-        this.resources = resources.data;
-        this.resourcesFetched();
+        self.resources = [];
       }
     }).then((page) => {
       self.resources = self.resources.concat(page.data);
