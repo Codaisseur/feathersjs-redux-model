@@ -45,8 +45,6 @@ class BaseModel {
   }
 
   save(resource, properties, reset = false) {
-    console.log('Got props:', properties);
-
     if (reset) {
       // Overwrite with the props
       const newProps = Object.assign({}, resource, properties)

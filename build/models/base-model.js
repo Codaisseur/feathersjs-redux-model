@@ -90,8 +90,6 @@ var BaseModel = function () {
     value: function save(resource, properties) {
       var reset = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
-      console.log('Got props:', properties);
-
       if (reset) {
         // Overwrite with the props
         var _newProps = (0, _simpleAssign2.default)({}, resource, properties);
